@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#15803d">
+  <title>Verduler&iacute;a | Pedido f&aacute;cil</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 text-gray-900">
+  <header class="sticky top-0 z-30 bg-green-700 text-white shadow-md">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
+      <h1 class="text-2xl font-bold">Verduras M y V</h1>
+      <button id="menuBoton" type="button" aria-expanded="false" aria-controls="menu"
+        class="rounded-lg px-4 py-2 text-lg font-semibold hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-white">
+        Categor&iacute;as
+      </button>
+    </div>
+    <nav id="menu" class="hidden border-t border-green-600 bg-green-800 px-4 py-2" aria-label="Categor&iacute;as de productos">
+      <div class="mx-auto flex max-w-5xl flex-wrap gap-2">
+        <button data-categoria="todos" class="categoria rounded-full bg-white px-4 py-2 font-semibold text-green-800">Todos</button>
+        <button data-categoria="tuberculos" class="categoria rounded-full px-4 py-2 font-semibold hover:bg-green-700">Tub&eacute;rculos</button>
+        <button data-categoria="verduras" class="categoria rounded-full px-4 py-2 font-semibold hover:bg-green-700">Verduras</button>
+        <button data-categoria="hortalizas" class="categoria rounded-full px-4 py-2 font-semibold hover:bg-green-700">Hortalizas</button>
+        <button data-categoria="chinos" class="categoria rounded-full px-4 py-2 font-semibold hover:bg-green-700">Productos chinos</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-4 pb-80 pt-5">
+    <section class="mb-5 rounded-2xl bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold uppercase tracking-wide text-green-700">Compra f&aacute;cil desde tu celular</p>
+      <h2 id="tituloCategoria" class="mt-1 text-3xl font-bold">Tub&eacute;rculos</h2>
+      <p class="mt-2 text-lg text-gray-700">Elige lo que necesitas, indica la cantidad y env&iacute;a tu pedido por WhatsApp.</p>
+    </section>
+    <label for="buscador" class="mb-2 block text-lg font-semibold">Buscar un producto</label>
+    <input id="buscador" type="search" placeholder="Ejemplo: papa" autocomplete="off"
+      class="mb-5 w-full rounded-xl border-2 border-gray-300 bg-white p-4 text-lg focus:border-green-700 focus:outline-none">
+    <p id="estado" class="mb-3 text-lg text-gray-700" aria-live="polite"></p>
+    <section id="productos" class="grid grid-cols-1 gap-4 sm:grid-cols-2" aria-label="Productos"></section>
+  </main>
+
+  <section class="fixed inset-x-0 bottom-0 z-20 border-t-2 border-green-200 bg-white shadow-[0_-8px_24px_rgba(0,0,0,0.12)]">
+    <div class="mx-auto max-w-5xl px-4 pb-4 pt-3">
+      <details id="pedidoDetalle" open>
+        <summary class="cursor-pointer list-none text-xl font-bold">Mi pedido <span class="text-base font-normal text-gray-600">(toca para ver u ocultar)</span></summary>
+        <ul id="lista" class="mt-2 max-h-24 space-y-1 overflow-y-auto text-base" aria-live="polite"></ul>
+        <label for="horario" class="mt-2 block font-semibold">Rango horario que prefieres:</label>
+        <input id="horario" type="text" placeholder="Ejemplo: de 8 a 10 de la ma&ntilde;ana"
+          class="mt-1 min-h-12 w-full rounded-lg border-2 border-gray-300 px-3 text-base" autocomplete="off">
+      </details>
+      <button id="enviarPedido" type="button" class="mt-3 min-h-14 w-full rounded-xl bg-green-700 px-4 text-xl font-bold text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300">
+        Enviar pedido por WhatsApp
+      </button>
+    </div>
+  </section>
+  <script src="script.js"></script>
+</body>
+</html>

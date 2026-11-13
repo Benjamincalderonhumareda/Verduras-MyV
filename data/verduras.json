@@ -1,0 +1,8 @@
+[
+  { "id": 6, "nombre": "Arveja", "precio": 4.0, "imagen": "img/arveja.jpg" },
+  { "id": 7, "nombre": "Vaina", "precio": 3.5, "imagen": "img/vaina.jpg" },
+  { "id": 8, "nombre": "Espinaca", "precio": 2.0, "imagen": "img/espinaca.jpg" },
+  { "id": 9, "nombre": "Habas", "precio": 3.8, "imagen": "img/habas.jpg" },
+  { "id": 10, "nombre": "Frejol", "precio": 4.5, "imagen": "img/frejol.jpg" },
+  { "id": 11, "nombre": "Pallar", "precio": 5.0, "imagen": "img/pallar.jpg" }
+]

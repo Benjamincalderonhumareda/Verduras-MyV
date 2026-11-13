@@ -1,0 +1,15 @@
+[
+  { "id": 1, "nombre": "Papa Blanca/Yungay", "precio": 2.0, "imagen": "img/papa.jpg" },
+  { "id": 2, "nombre": "Papa Rosada", "precio": 2.0, "imagen": "img/papa.jpg" },
+  { "id": 3, "nombre": "Papa Negra", "precio": 2.0, "imagen": "img/papa.jpg" },
+  { "id": 4, "nombre": "Papa Amarilla", "precio": 2.0, "imagen": "img/papa.jpg" },
+  { "id": 5, "nombre": "Papa Huayro", "precio": 2.0, "imagen": "img/papa.jpg" },
+  { "id": 6, "nombre": "Papa Humantanga", "precio": 2.0, "imagen": "img/papa.jpg" },
+  { "id": 7, "nombre": "Papa Peruanita", "precio": 2.0, "imagen": "img/papa.jpg" },
+  { "id": 8, "nombre": "Papa Camotillo", "precio": 2.0, "imagen": "img/papa.jpg" },
+  { "id": 9, "nombre": "Camote Amarillo", "precio": 2.5, "imagen": "img/camote.jpg" },
+  { "id": 10, "nombre": "Camote Morado", "precio": 3.5, "imagen": "img/camote.jpg" },
+  { "id": 11, "nombre": "Yuca Amarilla", "precio": 1.8, "imagen": "img/yuca.jpg" },
+  { "id": 12, "nombre": "Olluco", "precio": 3.0, "imagen": "img/olluco.jpg" },
+  { "id": 13, "nombre": "Mashua", "precio": 3.5, "imagen": "img/mashua.jpg" }
+]

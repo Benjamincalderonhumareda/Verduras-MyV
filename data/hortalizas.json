@@ -1,0 +1,7 @@
+[
+  { "id": 12, "nombre": "Cebolla", "precio": 2.2, "imagen": "img/cebolla.jpg" },
+  { "id": 13, "nombre": "Zanahoria", "precio": 2.0, "imagen": "img/zanahoria.jpg" },
+  { "id": 14, "nombre": "Limón", "precio": 3.0, "imagen": "img/limon.jpg" },
+  { "id": 15, "nombre": "Ají Amarillo", "precio": 6.0, "imagen": "img/aji.jpg" },
+  { "id": 16, "nombre": "Tomate", "precio": 2.8, "imagen": "img/tomate.jpg" }
+]

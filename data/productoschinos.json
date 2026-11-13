@@ -1,0 +1,6 @@
+[
+  { "id": 17, "nombre": "Aceite", "precio": 10.0, "imagen": "img/aceite.jpg" },
+  { "id": 18, "nombre": "Salsa de Soya", "precio": 5.0, "imagen": "img/soya.jpg" },
+  { "id": 19, "nombre": "Sazonador Chaufa", "precio": 4.0, "imagen": "img/chaufa.jpg" },
+  { "id": 20, "nombre": "Frejol Chino", "precio": 3.5, "imagen": "img/frejolchino.jpg" }
+]
