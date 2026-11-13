@@ -6,54 +6,69 @@
   <meta name="theme-color" content="#15803d">
   <title>Verduler&iacute;a | Pedido f&aacute;cil</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-green-50 text-gray-900">
-  <header class="sticky top-0 z-30 bg-green-700 text-white shadow-md">
-    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-      <h1 class="text-2xl font-bold">Verduras M y V</h1>
-      <button id="menuBoton" type="button" aria-expanded="false" aria-controls="menu"
-        class="rounded-lg px-4 py-2 text-lg font-semibold hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-white">
-        Categor&iacute;as
+<body class="overflow-x-hidden bg-green-50 text-gray-900">
+  <header class="app-header sticky top-0 z-30">
+    <div class="header-top">
+      <div class="store-brand">
+        <span class="store-logo" aria-hidden="true">&#129388;</span>
+        <div class="store-copy">
+          <h1>Verduras M y V</h1>
+          <p>Frescura del campo a tu casa</p>
+        </div>
+      </div>
+      <button id="abrirLista" type="button" aria-controls="vistaLista" aria-pressed="false" class="list-shortcut">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M9 10h6M9 14h6M9 18h3"/>
+        </svg>
+        <span>Lista</span>
+        <span id="cantidadLista" class="list-count" aria-label="Productos en la lista">0</span>
       </button>
     </div>
-    <nav id="menu" class="hidden border-t border-green-600 bg-green-800 px-4 py-2" aria-label="Categor&iacute;as de productos">
-      <div class="mx-auto flex max-w-5xl flex-wrap gap-2">
-        <button data-categoria="todos" class="categoria rounded-full bg-white px-4 py-2 font-semibold text-green-800">Todos</button>
-        <button data-categoria="tuberculos" class="categoria rounded-full px-4 py-2 font-semibold hover:bg-green-700">Tub&eacute;rculos</button>
-        <button data-categoria="verduras" class="categoria rounded-full px-4 py-2 font-semibold hover:bg-green-700">Verduras</button>
-        <button data-categoria="hortalizas" class="categoria rounded-full px-4 py-2 font-semibold hover:bg-green-700">Hortalizas</button>
-        <button data-categoria="chinos" class="categoria rounded-full px-4 py-2 font-semibold hover:bg-green-700">Productos chinos</button>
-      </div>
+    <nav id="categoriasNav" class="category-strip" aria-label="Apartados">
+      <button type="button" data-categoria="todos" aria-pressed="false" class="categoria">Todos</button>
+      <button type="button" data-categoria="tuberculos" aria-pressed="true" class="categoria"><span aria-hidden="true">&#129364;</span> Tub&eacute;rculos</button>
+      <button type="button" data-categoria="verduras" aria-pressed="false" class="categoria"><span aria-hidden="true">&#129388;</span> Verduras</button>
+      <button type="button" data-categoria="hortalizas" aria-pressed="false" class="categoria"><span aria-hidden="true">&#129365;</span> Hortalizas</button>
+      <button type="button" data-categoria="chinos" aria-pressed="false" class="categoria"><span aria-hidden="true">&#129377;</span> Productos chinos</button>
     </nav>
   </header>
 
-  <main class="mx-auto max-w-5xl px-4 pb-80 pt-5">
+  <main class="mx-auto max-w-2xl px-4 pb-8 pt-5">
+    <div id="vistaCatalogo">
     <section class="mb-5 rounded-2xl bg-white p-5 shadow-sm">
-      <p class="text-sm font-bold uppercase tracking-wide text-green-700">Compra f&aacute;cil desde tu celular</p>
-      <h2 id="tituloCategoria" class="mt-1 text-3xl font-bold">Tub&eacute;rculos</h2>
-      <p class="mt-2 text-lg text-gray-700">Elige lo que necesitas, indica la cantidad y env&iacute;a tu pedido por WhatsApp.</p>
+      <p class="text-sm font-bold uppercase tracking-wide text-green-700">Haz tu lista desde tu celular</p>
+      <h2 id="tituloCategoria" tabindex="-1" class="mt-1 text-3xl font-bold">Tub&eacute;rculos</h2>
+      <p class="mt-2 text-lg text-gray-700">Elige lo que necesitas y envia tu lista al WhatsApp de Fiorella.</p>
     </section>
+    <div id="zonaBusqueda" class="mb-5">
     <label for="buscador" class="mb-2 block text-lg font-semibold">Buscar un producto</label>
     <input id="buscador" type="search" placeholder="Ejemplo: papa" autocomplete="off"
-      class="mb-5 w-full rounded-xl border-2 border-gray-300 bg-white p-4 text-lg focus:border-green-700 focus:outline-none">
-    <p id="estado" class="mb-3 text-lg text-gray-700" aria-live="polite"></p>
-    <section id="productos" class="grid grid-cols-1 gap-4 sm:grid-cols-2" aria-label="Productos"></section>
-  </main>
-
-  <section class="fixed inset-x-0 bottom-0 z-20 border-t-2 border-green-200 bg-white shadow-[0_-8px_24px_rgba(0,0,0,0.12)]">
-    <div class="mx-auto max-w-5xl px-4 pb-4 pt-3">
-      <details id="pedidoDetalle" open>
-        <summary class="cursor-pointer list-none text-xl font-bold">Mi pedido <span class="text-base font-normal text-gray-600">(toca para ver u ocultar)</span></summary>
-        <ul id="lista" class="mt-2 max-h-24 space-y-1 overflow-y-auto text-base" aria-live="polite"></ul>
-        <label for="horario" class="mt-2 block font-semibold">Rango horario que prefieres:</label>
-        <input id="horario" type="text" placeholder="Ejemplo: de 8 a 10 de la ma&ntilde;ana"
-          class="mt-1 min-h-12 w-full rounded-lg border-2 border-gray-300 px-3 text-base" autocomplete="off">
-      </details>
-      <button id="enviarPedido" type="button" class="mt-3 min-h-14 w-full rounded-xl bg-green-700 px-4 text-xl font-bold text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300">
-        Enviar pedido por WhatsApp
-      </button>
+      aria-controls="sugerenciasBusqueda" class="w-full rounded-xl border-2 border-gray-300 bg-white p-4 text-lg focus:border-green-700 focus:outline-none">
+    <ul id="sugerenciasBusqueda" class="hidden mt-2 max-h-72 overflow-y-auto rounded-xl border border-green-200 bg-white shadow-sm" aria-label="Productos encontrados"></ul>
+    <p id="estadoBusqueda" class="sr-only" role="status"></p>
     </div>
-  </section>
-  <script src="script.js"></script>
+    <p id="estado" class="mb-3 text-lg text-gray-700" aria-live="polite"></p>
+    <p id="avisoLista" class="mb-3 text-base font-semibold text-green-800" role="status"></p>
+    <div id="productos" class="space-y-8" aria-label="Productos"></div>
+    </div>
+
+    <section id="vistaLista" class="hidden rounded-2xl bg-white p-4 shadow-sm" aria-labelledby="tituloLista">
+      <button id="volverProductos" type="button" class="mb-4 min-h-12 rounded-xl bg-green-50 px-4 font-bold text-green-800 focus:outline-none focus:ring-4 focus:ring-green-300">Volver a productos</button>
+      <h2 id="tituloLista" tabindex="-1" class="text-3xl font-bold">Lista</h2>
+      <p id="estadoGuardado" class="mt-2 text-sm text-gray-600" role="status"></p>
+      <p class="mt-2 text-base text-gray-600">Revisa tus productos e indica el rango de env&iacute;o que prefieres.</p>
+      <p id="listaVacia" class="my-5 text-lg text-gray-700">Tu lista est&aacute; vac&iacute;a. Agrega productos para comenzar.</p>
+      <ul id="lista" class="my-4 space-y-2 text-lg" aria-live="polite"></ul>
+      <label for="horario" class="mt-4 block text-lg font-semibold">Rango de env&iacute;o:</label>
+      <input id="horario" type="text" placeholder="Ejemplo: de 8 a 10 de la ma&ntilde;ana"
+        class="mt-2 min-h-14 w-full rounded-xl border-2 border-gray-300 px-3 text-lg" autocomplete="off">
+      <button id="enviarPedido" type="button" disabled class="mt-4 min-h-14 w-full rounded-xl bg-green-700 px-4 py-3 text-lg font-bold text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 disabled:cursor-not-allowed disabled:opacity-50">
+        Enviar lista a WhatsApp
+      </button>
+    </section>
+  </main>
+  <script type="module" src="script.js"></script>
 </body>
 </html>

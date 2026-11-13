@@ -1,12 +1,11 @@
-const categorias = [
-  { clave: "tuberculos", archivo: "data/tuberculos.json", nombre: "Tub\u00e9rculos" },
-  { clave: "verduras", archivo: "data/verduras.json", nombre: "Verduras" },
-  { clave: "hortalizas", archivo: "data/hortalizas.json", nombre: "Hortalizas" },
-  { clave: "chinos", archivo: "data/productoschinos.json", nombre: "Productos chinos" }
-];
+import { categorias } from "./js/categorias/index.js";
+import { crearTarjeta } from "./js/producto-card.js";
+import { renderizarCategoriasHorizontales } from "./js/renderizador.js";
+import { leerListaGuardada, guardarLista } from "./js/lista-storage.js";
+import { buscarProductos } from "./js/busqueda.js";
 
 let productos = [];
-let carrito = [];
+let listaProductos = [];
 let categoriaActual = "tuberculos";
 
 const contenedorProductos = document.getElementById("productos");
@@ -19,10 +18,15 @@ async function cargarDatos() {
       const respuesta = await fetch(categoria.archivo);
       if (!respuesta.ok) throw new Error(`No se pudo cargar ${categoria.nombre}`);
       const datos = await respuesta.json();
-      return datos.map(producto => ({ ...producto, categoria: categoria.clave }));
+      return datos.map(producto => ({
+        ...producto,
+        categoria: categoria.clave,
+        categoriaProducto: producto.categoria
+      }));
     }));
     productos = listas.flat();
     aplicarFiltro();
+    mostrarSugerencias();
   } catch (error) {
     estado.textContent = "No pudimos cargar los productos. Revisa tu conexion e intentalo otra vez.";
     console.error(error);
@@ -40,127 +44,116 @@ function crearBoton(texto, accesible, clases) {
 
 function mostrar(lista) {
   contenedorProductos.replaceChildren();
-  estado.textContent = lista.length ? `${lista.length} productos disponibles` : "No encontramos productos con ese nombre.";
+  const categoria = categorias.find(item => item.clave === categoriaActual);
+  document.getElementById("tituloCategoria").textContent = categoriaActual === "todos"
+    ? "Todos los productos"
+    : categoria.nombre;
+  if (!lista.length) return;
 
-  lista.forEach(producto => {
-    const tarjeta = document.createElement("article");
-    tarjeta.className = "rounded-2xl border border-gray-200 bg-white p-4 shadow-sm";
+  const crear = (producto, horizontal = false) => crearTarjeta(producto, agregarALista, horizontal);
+  if (categoriaActual === "todos") {
+    renderizarCategoriasHorizontales(contenedorProductos, lista, categorias, crear);
+    return;
+  }
 
-    const imagen = document.createElement("img");
-    imagen.src = producto.imagen;
-    imagen.alt = producto.nombre;
-    imagen.loading = "lazy";
-    imagen.className = "mb-3 h-36 w-full rounded-xl bg-green-50 object-cover";
-    imagen.addEventListener("error", () => imagen.remove());
-
-    const nombre = document.createElement("h3");
-    nombre.className = "text-2xl font-bold";
-    nombre.textContent = producto.nombre;
-
-    const precio = document.createElement("p");
-    precio.className = "mt-1 text-lg font-semibold text-green-800";
-    precio.textContent = `Precio: S/ ${Number(producto.precio).toFixed(2)} por kilo`;
-
-    const notaPrecioUnidad = document.createElement("p");
-    notaPrecioUnidad.className = "mt-1 text-sm text-gray-600";
-    notaPrecioUnidad.textContent = "Puede pedir por kilo o Unidad";
-
-    const etiqueta = document.createElement("label");
-    etiqueta.className = "mt-4 block text-lg font-semibold";
-
-    const tipo = document.createElement("input");
-    tipo.type = "hidden";
-    tipo.value = "kg";
-
-    const opciones = document.createElement("div");
-    opciones.className = "mt-2 grid grid-cols-2 gap-2";
-    const botonKg = crearBoton("Por kilos", "Elegir cantidad por kilos", "bg-green-700 font-bold text-white");
-    const botonUnidad = crearBoton("Por unidad", "Elegir cantidad por unidad", "bg-gray-100 font-bold text-gray-900");
-    const seleccionarTipo = nuevoTipo => {
-      tipo.value = nuevoTipo;
-      botonKg.className = `min-h-14 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-200 ${nuevoTipo === "kg" ? "bg-green-700 text-white" : "bg-gray-100 text-gray-900"} font-bold`;
-      botonUnidad.className = `min-h-14 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-200 ${nuevoTipo === "unidad" ? "bg-green-700 text-white" : "bg-gray-100 text-gray-900"} font-bold`;
-      etiqueta.textContent = nuevoTipo === "kg" ? "Cantidad en kilos" : "Cantidad de unidades";
-      cantidad.step = nuevoTipo === "kg" ? "0.5" : "1";
-      cantidad.min = nuevoTipo === "kg" ? "0.5" : "1";
-      cantidad.placeholder = nuevoTipo === "kg" ? "Ej. 1 o 1.5" : "Ej. 1, 2, 3...";
-      cantidad.setAttribute("aria-label", `${etiqueta.textContent} de ${producto.nombre}`);
-    };
-    botonKg.addEventListener("click", () => seleccionarTipo("kg"));
-    botonUnidad.addEventListener("click", () => seleccionarTipo("unidad"));
-    opciones.append(botonKg, botonUnidad);
-
-    const controles = document.createElement("div");
-    controles.className = "mt-2 grid grid-cols-[3.5rem_1fr_3.5rem] gap-2";
-    const menos = crearBoton("-", "Restar cantidad", "bg-gray-100 text-2xl text-gray-900");
-    const cantidad = document.createElement("input");
-    cantidad.type = "number";
-    cantidad.step = "0.5";
-    cantidad.min = "0.5";
-    cantidad.inputMode = "decimal";
-    cantidad.className = "min-h-14 w-full rounded-xl border-2 border-gray-300 px-3 text-center text-xl focus:border-green-700 focus:outline-none";
-    const mas = crearBoton("+", "Aumentar cantidad", "bg-gray-100 text-2xl text-gray-900");
-    const cambiar = delta => {
-      const paso = tipo.value === "kg" ? 0.5 : 1;
-      const actual = Number(cantidad.value) || 0;
-      cantidad.value = Math.max(0, Math.round((actual + delta * paso) * 10) / 10) || "";
-    };
-    menos.addEventListener("click", () => cambiar(-1));
-    mas.addEventListener("click", () => cambiar(1));
-    etiqueta.htmlFor = `cantidad-${producto.categoria}-${producto.id}`;
-    cantidad.id = etiqueta.htmlFor;
-    controles.append(menos, cantidad, mas);
-    seleccionarTipo("kg");
-
-    const agregar = crearBoton("Agregar al pedido", "Agregar al pedido", "mt-3 w-full bg-green-700 text-lg font-bold text-white hover:bg-green-800");
-    agregar.addEventListener("click", () => agregarAlCarrito(producto, cantidad, tipo.value));
-    tarjeta.append(imagen, nombre, precio, notaPrecioUnidad, opciones, etiqueta, controles, agregar);
-    contenedorProductos.append(tarjeta);
-  });
+  categoria.render(contenedorProductos, lista, crear);
 }
 
 function aplicarFiltro() {
-  const texto = campoBusqueda.value.trim().toLocaleLowerCase("es");
-  const filtrados = productos.filter(producto =>
-    (categoriaActual === "todos" || producto.categoria === categoriaActual) &&
-    producto.nombre.toLocaleLowerCase("es").includes(texto)
-  );
+  const coincidencias = campoBusqueda.value.trim() ? buscarProductos(productos, campoBusqueda.value) : productos;
+  const filtrados = coincidencias.filter(producto => categoriaActual === "todos" || producto.categoria === categoriaActual);
   mostrar(filtrados);
 }
 
-function seleccionarCategoria(categoria) {
-  categoriaActual = categoria;
-  const elegida = categorias.find(item => item.clave === categoria);
-  document.getElementById("tituloCategoria").textContent = elegida?.nombre ?? "Todos los productos";
-  document.querySelectorAll(".categoria").forEach(boton => {
-    const activa = boton.dataset.categoria === categoria;
-    boton.classList.toggle("bg-white", activa);
-    boton.classList.toggle("text-green-800", activa);
-    boton.setAttribute("aria-pressed", String(activa));
+function cerrarSugerencias() {
+  document.getElementById("sugerenciasBusqueda").classList.add("hidden");
+}
+
+function mostrarSugerencias() {
+  const sugerencias = document.getElementById("sugerenciasBusqueda");
+  sugerencias.replaceChildren();
+  if (!campoBusqueda.value.trim()) {
+    cerrarSugerencias();
+    document.getElementById("estadoBusqueda").textContent = "";
+    return;
+  }
+  const encontrados = buscarProductos(productos, campoBusqueda.value);
+  document.getElementById("estadoBusqueda").textContent = `${encontrados.length} productos encontrados.`;
+  encontrados.forEach(producto => {
+    const fila = document.createElement("li");
+    const boton = document.createElement("button");
+    boton.type = "button";
+    boton.className = "block min-h-12 w-full border-b border-green-100 px-4 py-3 text-left hover:bg-green-50 focus:bg-green-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-700";
+    const nombre = document.createElement("span");
+    nombre.className = "block text-lg font-semibold";
+    nombre.textContent = producto.nombre;
+    const categoria = document.createElement("span");
+    categoria.className = "block text-sm text-gray-600";
+    categoria.textContent = categorias.find(item => item.clave === producto.categoria).nombre;
+    boton.append(nombre, categoria);
+    boton.addEventListener("click", () => irAProducto(producto));
+    fila.append(boton);
+    sugerencias.append(fila);
   });
-  document.getElementById("menu").classList.add("hidden");
-  document.getElementById("menuBoton").setAttribute("aria-expanded", "false");
+  if (!encontrados.length) {
+    const mensaje = document.createElement("li");
+    mensaje.className = "px-4 py-3 text-gray-600";
+    mensaje.textContent = "No encontramos productos con ese nombre.";
+    sugerencias.append(mensaje);
+  }
+  sugerencias.classList.remove("hidden");
+}
+
+function irAProducto(producto) {
+  seleccionarCategoria(producto.categoria);
+  requestAnimationFrame(() => {
+    const tarjeta = [...contenedorProductos.querySelectorAll("[data-producto-nombre]")]
+      .find(elemento => elemento.dataset.productoNombre === producto.nombre && elemento.dataset.productoCategoria === producto.categoria);
+    if (!tarjeta) return;
+    tarjeta.classList.add("product-found");
+    const fila = tarjeta.parentElement;
+    if (fila.scrollWidth > fila.clientWidth) {
+      fila.scrollLeft += tarjeta.getBoundingClientRect().left - fila.getBoundingClientRect().left - 16;
+    }
+    tarjeta.focus({ preventScroll: true });
+    const margen = document.querySelector("header").getBoundingClientRect().height + 16;
+    window.scrollTo({ top: Math.max(0, window.scrollY + tarjeta.getBoundingClientRect().top - margen), behavior: "instant" });
+  });
+}
+
+function seleccionarCategoria(clave) {
+  categoriaActual = clave;
+  document.querySelectorAll(".categoria").forEach(boton => {
+    const activa = boton.dataset.categoria === clave;
+    boton.setAttribute("aria-pressed", String(activa));
+    if (activa) boton.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+  });
+  campoBusqueda.value = "";
+  cerrarSugerencias();
   aplicarFiltro();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function agregarAlCarrito(producto, campo, tipo) {
+function agregarALista(producto, campo, tipo) {
   const cantidad = Number(campo.value);
   if (!Number.isFinite(cantidad) || cantidad <= 0 || (tipo === "unidad" && !Number.isInteger(cantidad))) {
     campo.focus();
     alert(tipo === "kg" ? "Indica cuantos kilos deseas." : "Indica una cantidad entera de unidades.");
     return;
   }
-  carrito.push({ nombre: producto.nombre, cantidad, tipo });
+  listaProductos.push({ nombre: producto.nombre, cantidad, tipo });
   campo.value = "";
-  actualizarCarrito();
-  document.getElementById("pedidoDetalle").open = true;
+  actualizarLista();
+  document.getElementById("avisoLista").textContent = `${producto.nombre} agregado a tu lista.`;
 }
 
-function actualizarCarrito() {
+function actualizarLista() {
   const lista = document.getElementById("lista");
   lista.replaceChildren();
-  carrito.forEach((item, indice) => {
+  document.getElementById("cantidadLista").textContent = listaProductos.length;
+  document.getElementById("listaVacia").classList.toggle("hidden", listaProductos.length > 0);
+  document.getElementById("enviarPedido").disabled = listaProductos.length === 0;
+  listaProductos.forEach((item, indice) => {
     const fila = document.createElement("li");
     fila.className = "flex items-center justify-between gap-2 border-b border-gray-200 py-1";
     const detalle = document.createElement("span");
@@ -168,44 +161,96 @@ function actualizarCarrito() {
     detalle.textContent = `${item.nombre}: ${item.cantidad} ${unidad}`;
     const quitar = crearBoton("Quitar", `Quitar ${item.nombre}`, "min-h-10 px-3 text-sm font-semibold text-red-700");
     quitar.addEventListener("click", () => {
-      carrito.splice(indice, 1);
-      actualizarCarrito();
+      listaProductos.splice(indice, 1);
+      actualizarLista();
     });
     fila.append(detalle, quitar);
     lista.append(fila);
   });
+  guardarListaLocal();
 }
 
-function enviarPedido() {
-  if (!carrito.length) {
-    alert("Agrega al menos un producto antes de enviar tu pedido.");
+function guardarListaLocal() {
+  const guardado = guardarLista(listaProductos, document.getElementById("horario").value);
+  document.getElementById("estadoGuardado").textContent = guardado
+    ? "Tu lista se guarda automaticamente en este navegador."
+    : "Este navegador no permite guardar la lista. Si recargas, podrias perderla.";
+}
+
+function enviarLista() {
+  if (!listaProductos.length) {
+    alert("Agrega al menos un producto antes de enviar tu lista.");
     return;
   }
   const horario = document.getElementById("horario").value.trim();
   if (!horario) {
     document.getElementById("horario").focus();
-    alert("Escribe el rango horario que prefieres.");
+    alert("Escribe el rango de envio que prefieres.");
     return;
   }
   const lineas = [
-    "Hola, quisiera hacer este pedido:",
-    ...carrito.map(item => `- ${item.nombre}: ${item.cantidad} ${item.tipo === "kg" ? "kg" : "unidades"}`),
-    `Horario preferido: ${horario}`,
+    "Hola, quisiera solicitar los productos de esta lista:",
+    ...listaProductos.map(item => `- ${item.nombre}: ${item.cantidad} ${item.tipo === "kg" ? "kg" : "unidades"}`),
+    `Rango de envio preferido: ${horario}`,
     "Entiendo que el precio final puede variar al pesar los productos."
   ];
   const url = `https://wa.me/51949485082?text=${encodeURIComponent(lineas.join("\n"))}`;
   window.open(url, "_blank", "noopener,noreferrer");
 }
 
-document.getElementById("menuBoton").addEventListener("click", event => {
-  const menu = document.getElementById("menu");
-  const abierto = menu.classList.toggle("hidden") === false;
-  event.currentTarget.setAttribute("aria-expanded", String(abierto));
-});
 document.querySelectorAll(".categoria").forEach(boton => {
-  boton.addEventListener("click", () => seleccionarCategoria(boton.dataset.categoria));
+  boton.addEventListener("click", () => {
+    mostrarVistaLista(false);
+    seleccionarCategoria(boton.dataset.categoria);
+    document.getElementById("tituloCategoria").focus({ preventScroll: true });
+  });
 });
-campoBusqueda.addEventListener("input", aplicarFiltro);
-document.getElementById("enviarPedido").addEventListener("click", enviarPedido);
-seleccionarCategoria("tuberculos");
+
+function mostrarVistaLista(abierta) {
+  document.getElementById("vistaLista").classList.toggle("hidden", !abierta);
+  document.getElementById("vistaCatalogo").classList.toggle("hidden", abierta);
+  document.querySelectorAll('.categoria').forEach(boton => {
+    boton.setAttribute('aria-pressed', String(!abierta && boton.dataset.categoria === categoriaActual));
+  });
+  document.getElementById("abrirLista").setAttribute("aria-pressed", String(abierta));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (abierta) document.getElementById("tituloLista").focus({ preventScroll: true });
+  else document.getElementById("abrirLista").focus({ preventScroll: true });
+}
+
+document.getElementById("abrirLista").addEventListener("click", () => mostrarVistaLista(true));
+document.getElementById("volverProductos").addEventListener("click", () => mostrarVistaLista(false));
+campoBusqueda.addEventListener("input", () => {
+  aplicarFiltro();
+  mostrarSugerencias();
+});
+campoBusqueda.addEventListener("focus", mostrarSugerencias);
+campoBusqueda.addEventListener("keydown", evento => {
+  if (evento.key === "Enter") {
+    const primero = buscarProductos(productos, campoBusqueda.value)[0];
+    if (primero) { evento.preventDefault(); irAProducto(primero); }
+  }
+  if (evento.key === "ArrowDown") {
+    const primero = document.querySelector("#sugerenciasBusqueda button");
+    if (primero) { evento.preventDefault(); primero.focus(); }
+  }
+});
+document.getElementById("zonaBusqueda").addEventListener("keydown", evento => {
+  if (evento.key === "Escape") {
+    campoBusqueda.focus();
+    cerrarSugerencias();
+  }
+});
+document.addEventListener("click", evento => {
+  if (!evento.target.closest("#zonaBusqueda")) cerrarSugerencias();
+});
+document.addEventListener("focusin", evento => {
+  if (!evento.target.closest("#zonaBusqueda")) cerrarSugerencias();
+});
+document.getElementById("enviarPedido").addEventListener("click", enviarLista);
+document.getElementById("horario").addEventListener("input", guardarListaLocal);
+const listaGuardada = leerListaGuardada();
+listaProductos = listaGuardada.productos;
+document.getElementById("horario").value = listaGuardada.horario;
+actualizarLista();
 cargarDatos();

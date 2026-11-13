@@ -1,8 +1,22 @@
 [
-  { "id": 6, "nombre": "Arveja", "precio": 4.0, "imagen": "img/arveja.jpg" },
-  { "id": 7, "nombre": "Vaina", "precio": 3.5, "imagen": "img/vaina.jpg" },
-  { "id": 8, "nombre": "Espinaca", "precio": 2.0, "imagen": "img/espinaca.jpg" },
-  { "id": 9, "nombre": "Habas", "precio": 3.8, "imagen": "img/habas.jpg" },
-  { "id": 10, "nombre": "Frejol", "precio": 4.5, "imagen": "img/frejol.jpg" },
-  { "id": 11, "nombre": "Pallar", "precio": 5.0, "imagen": "img/pallar.jpg" }
+  {"id": 1, "nombre": "Arveja", "precio": 4.0, "imagen": "img/Verduras/arverja.jpg", "categoria": "granos"},
+  {"id": 2, "nombre": "Vaina", "precio": 3.5, "imagen": "img/Verduras/vaina.jpg", "categoria": "granos"},
+  {"id": 3, "nombre": "Habas", "precio": 3.8, "imagen": "img/Verduras/habas.jpg", "categoria": "granos"},
+  {"id": 4, "nombre": "Frejol", "precio": 4.5, "imagen": "img/Verduras/frejol.jpg", "categoria": "granos"},
+  {"id": 5, "nombre": "Pallar", "precio": 5.0, "imagen": "img/Verduras/pallar.png", "categoria": "granos"},
+  {"id": 6, "nombre": "Apio", "precio": 2.0, "imagen": "img/Verduras/apio.jpg", "categoria": "plantas-raiz"},
+  {"id": 7, "nombre": "Poro", "precio": 2.0, "imagen": "img/Verduras/poro.jpg", "categoria": "plantas-raiz"},
+  {"id": 8, "nombre": "Beterraga", "precio": 2.0, "imagen": "img/Verduras/beterraga.jpg", "categoria": "plantas-raiz"},
+  {"id": 9, "nombre": "Rabanito", "precio": 2.0, "imagen": "img/Verduras/rabanito.jpg", "categoria": "plantas-raiz"},
+  {"id": 10, "nombre": "Nabo", "precio": 2.0, "imagen": "img/Verduras/nabo.jpg", "categoria": "plantas-raiz"},
+  {"id": 11, "nombre": "Espinaca", "precio": 2.0, "imagen": "img/Verduras/espinaca.jpg", "categoria": "plantas-raiz"},
+  {"id": 12, "nombre": "Americana", "precio": 2.0, "imagen": "img/Verduras/americana.jpg", "categoria": "lechugas"},
+  {"id": 13, "nombre": "Seda/Criolla", "precio": 2.0, "imagen": "img/Verduras/seda.jpg", "categoria": "lechugas"},
+  {"id": 14, "nombre": "Lechuga Org\u00e1nica/Crespa", "precio": 2.0, "imagen": "img/Verduras/lechuga crespa.jpg", "categoria": "lechugas"},
+  {"id": 15, "nombre": "Lechuga Morada", "precio": 2.0, "imagen": "img/Verduras/lechuga morada.jpg", "categoria": "lechugas"},
+  {"id": 16, "nombre": "Lechuga Romana", "precio": 2.0, "imagen": "img/Verduras/romana.jpg", "categoria": "lechugas"},
+  {"id": 17, "nombre": "Col Crespa", "precio": 2.0, "imagen": "img/Verduras/col crespa.jpg", "categoria": "col"},
+  {"id": 18, "nombre": "Col China", "precio": 2.0, "imagen": "img/Verduras/col china.jpg", "categoria": "col"},
+  {"id": 19, "nombre": "Col Morada", "precio": 2.0, "imagen": "img/Verduras/col morada.jpg", "categoria": "col"},
+  {"id": 20, "nombre": "Pak choi", "precio": 2.0, "imagen": "img/Verduras/pak choi.jpg", "categoria": "col"}
 ]

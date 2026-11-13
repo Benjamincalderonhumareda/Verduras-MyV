@@ -1,7 +1,15 @@
 [
-  { "id": 12, "nombre": "Cebolla", "precio": 2.2, "imagen": "img/cebolla.jpg" },
-  { "id": 13, "nombre": "Zanahoria", "precio": 2.0, "imagen": "img/zanahoria.jpg" },
-  { "id": 14, "nombre": "Limón", "precio": 3.0, "imagen": "img/limon.jpg" },
-  { "id": 15, "nombre": "Ají Amarillo", "precio": 6.0, "imagen": "img/aji.jpg" },
-  { "id": 16, "nombre": "Tomate", "precio": 2.8, "imagen": "img/tomate.jpg" }
+  {"id": 1, "nombre": "Cebolla", "precio": 2.2, "imagen": "img/Hortalizas/cebolla.jpg"},
+  {"id": 2, "nombre": "Cebolla Blanca", "precio": 2.2, "imagen": "img/Hortalizas/cebolla blanca.jpg"},
+  {"id": 3, "nombre": "Zanahoria", "precio": 2.0, "imagen": "img/Hortalizas/zanahoria.jpg"},
+  {"id": 4, "nombre": "Lim\u00f3n Cascara Delgada", "precio": 3.0, "imagen": "img/Hortalizas/limon.jpg"},
+  {"id": 5, "nombre": "Tomate", "precio": 2.8, "imagen": "img/Hortalizas/tomate.jpg"},
+  {"id": 6, "nombre": "Pimiento Rojo", "precio": 2.0, "imagen": "img/Hortalizas/pimiento rojo.jpg"},
+  {"id": 7, "nombre": "Pimiento Amarillo", "precio": 2.0, "imagen": "img/Hortalizas/pimiento amarillo.jpg"},
+  {"id": 8, "nombre": "Pimiento Verde", "precio": 2.0, "imagen": "img/Hortalizas/pimiento verde.jpg"},
+  {"id": 9, "nombre": "Pimiento Colores", "precio": 2.0, "imagen": "img/Hortalizas/pimienta de colores.png"},
+  {"id": 10, "nombre": "Ajos Arequipe\u00f1o", "precio": 3.0, "imagen": "img/Hortalizas/ajos.jpg"},
+  {"id": 11, "nombre": "Kion", "precio": 3.0, "imagen": "img/Hortalizas/kion.jpg"},
+  {"id": 12, "nombre": "Aj\u00ed Amarillo", "precio": 6.0, "imagen": "img/Hortalizas/aji amarillo.jpg"},
+  {"id": 13, "nombre": "Aj\u00ed Limo", "precio": 6.0, "imagen": "img/Hortalizas/aji limo.jpg"}
 ]
